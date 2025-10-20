@@ -87,11 +87,13 @@
         <div class="game-canvas-container">
             <div class="game-layout">
                 <div class="house-display">🏠</div>
-                <canvas id="game-canvas"></canvas>
-            </div>
-            <!-- Car positioned above driveway -->
-            <div class="car-container">
-                <span class="car-sprite" id="car-sprite">🚗</span>
+                <div style="position: relative;">
+                    <!-- Car positioned above driveway -->
+                    <div class="car-container">
+                        <span class="car-sprite" id="car-sprite">🚗</span>
+                    </div>
+                    <canvas id="game-canvas"></canvas>
+                </div>
             </div>
         </div>
 

@@ -47,8 +47,9 @@ There is no "win" - the fire always eventually overwhelms defenses (mimicking re
 ## Running the Game
 
 ### Method 1: Direct Opening (Easiest)
-Simply run in a VSCode Powershell terminal:
-start <insert full path to indext.html file>
+1. Open a powershell in VsCode
+2. Navigate with cd until in ...\game_submission\game_app
+3. Run "start index.html"
 
 ### Method 2: Local Server (Optional)
 ```bash

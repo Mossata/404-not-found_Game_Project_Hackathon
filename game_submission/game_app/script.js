@@ -9,7 +9,7 @@ const CONFIG = {
     
     // Money system
     STARTING_MONEY: 2500,
-    INCOME_PER_SECOND: 30,
+    INCOME_PER_SECOND: 50,
     INCOME_TICK_MS: 1000,
     
     // Defense costs
@@ -23,11 +23,12 @@ const CONFIG = {
     // Game timing
     FIRE_SPAWN_INTERVAL: 8000,  // Spawn new fire every 8 seconds
     FIRE_MOVE_SPEED: 0.25,        // Base pixels per frame for smooth movement (~60fps)
-    FIRE_SPEED_INCREASE_PER_WAVE_TIER: 0.05,  // Speed increase every 3 waves
+    FIRE_SPEED_INCREASE_PER_WAVE_TIER: 0.1,  // Speed increase every 3 waves
     FIRE_SPREAD_INTERVAL: 12000, // Fire spreads sideways every 12 seconds
+    FIRE_ATTACK_INTERVAL: 1000, // Fires attack defenses every 1 second
     HOSE_SHOOT_INTERVAL: 1500,  // Water hoses shoot every 1.5 seconds
     DEFENSE_BURN_DAMAGE_INTERVAL: 1500, // Defenses on fire take damage every second
-    DEFENSE_BURN_DAMAGE: 0.05, // Damage per tick when on fire
+    DEFENSE_BURN_DAMAGE: 0.15, // Damage per tick when on fire
     
     // Positions
     DRIVEWAY_ROW: 2, // Middle row (0-indexed, so row 2 of 5)
@@ -37,16 +38,16 @@ const CONFIG = {
     // Sprite images (set to null if using emojis as fallback)
     USE_SPRITES: true, // Set to true when you have sprite images
     SPRITE_PATHS: {
-        fireNormal: '../assets/images/fire-normal.png',
-        fireEmber: '../assets/images/fire-ember.png',
-        hose: '../assets/images/hose.png',
-        hoseOnFire: '../assets/images/hose-on-fire.png',
-        wall: '../assets/images/wall.png',
-        sprinkler: '../assets/images/sprinkler.png',
-        sprinklerOnFire: '../assets/images/sprinkler-on-fire.png',
-        house: '../assets/images/house.png',
-        waterDroplet: '../assets/images/water-droplet.png',
-        car: '../assets/images/car.png'
+        fireNormal: './assets/images/fire-normal.png',
+        fireEmber: './assets/images/fire-ember.png',
+        hose: './assets/images/hose.png',
+        hoseOnFire: './assets/images/hose-on-fire.png',
+        wall: './assets/images/wall.png',
+        sprinkler: './assets/images/sprinkler.png',
+        sprinklerOnFire: './assets/images/sprinkler-on-fire.png',
+        house: './assets/images/house.png',
+        waterDroplet: './assets/images/water-droplet.png',
+        car: './assets/images/car.png'
     }
 };
 
@@ -108,8 +109,8 @@ const gameState = {
 const DEFENSES = {
     firebreak: {
         name: 'Fire Break',
-        icon: '�',
-        iconOnFire: '�', // Fire breaks don't catch fire
+        icon: '',
+        iconOnFire: '', // Fire breaks don't catch fire
         cost: 300,
         slowFactor: 3, // Slows fire significantly
         range: 0, // Only affects fires on the same tile
@@ -446,7 +447,7 @@ function spawnFire() {
     
     // Determine fire type (30% chance for ember type after wave 3)
     let fireType = 'normal';
-    if (gameState.waveNumber >= 3 && Math.random() < 0.3) {
+    if (gameState.waveNumber >= 3 && Math.random() < 0.2) {
         fireType = 'ember';
     }
     
@@ -460,7 +461,8 @@ function spawnFire() {
         strength: gameState.waveNumber, // Fire gets stronger each wave
         health: fireHealth,
         maxHealth: fireHealth,
-        lastMove: Date.now()
+        lastMove: Date.now(),
+        lastAttack: 0 // Track last time this fire attacked a defense
     };
     
     gameState.fires.push(fire);
@@ -490,7 +492,8 @@ function spawnFire() {
                 strength: gameState.waveNumber,
                 health: fireHealth,
                 maxHealth: fireHealth,
-                lastMove: Date.now()
+                lastMove: Date.now(),
+                lastAttack: 0 // Track last time this fire attacked a defense
             };
             gameState.fires.push(extraFire);
             gameState.grid[extraRow][col] = extraFire;
@@ -507,7 +510,7 @@ function moveFires() {
     const waveSpeedBonus = waveMultiplier * CONFIG.FIRE_SPEED_INCREASE_PER_WAVE_TIER;
     
     gameState.fires.forEach((fire, index) => {
-        // Calculate fire speed: base speed + wave bonus - defense slow
+        // Calculate fire speed: base speed + wave bonus / defense slow
         const slowFactor = getSlowFactorAt(fire.row, fire.col);
         const baseSpeed = CONFIG.FIRE_MOVE_SPEED + waveSpeedBonus;
         const moveSpeed = baseSpeed / slowFactor;
@@ -549,14 +552,18 @@ function moveFires() {
                         return;
                     }
                     
-                    // Attack the defense (only if not a fire break)
-                    obstacle.health--;
-                    console.log(`Fire attacks defense at (${fire.row}, ${newCol}). Health: ${obstacle.health}`);
-                    
-                    // SET DEFENSE ON FIRE (if it can catch fire)
-                    if (defenseInfo.canCatchFire && !obstacle.onFire) {
-                        obstacle.onFire = true;
-                        console.log(`${defenseInfo.name} at (${obstacle.row}, ${obstacle.col}) caught fire! 🔥`);
+                    // Attack the defense (only if not a fire break) - with cooldown timer
+                    const now = Date.now();
+                    if (!fire.lastAttack || now - fire.lastAttack >= CONFIG.FIRE_ATTACK_INTERVAL) {
+                        obstacle.health--;
+                        fire.lastAttack = now;
+                        console.log(`Fire attacks defense at (${fire.row}, ${newCol}). Health: ${obstacle.health}`);
+                        
+                        // SET DEFENSE ON FIRE (if it can catch fire)
+                        if (defenseInfo.canCatchFire && !obstacle.onFire) {
+                            obstacle.onFire = true;
+                            console.log(`${defenseInfo.name} at (${obstacle.row}, ${obstacle.col}) caught fire! 🔥`);
+                        }
                     }
                     
                     if (obstacle.health <= 0) {
@@ -653,7 +660,8 @@ function throwEmber(fire) {
             strength: fire.strength,
             health: fire.health, // Same health as parent fire
             maxHealth: fire.maxHealth,
-            lastMove: Date.now()
+            lastMove: Date.now(),
+            lastAttack: 0 // Track last time this fire attacked a defense
         };
         
         gameState.fires.push(emberFire);
@@ -709,7 +717,8 @@ function spreadFires() {
                         strength: fire.strength,
                         health: fireHealth,
                         maxHealth: fireHealth,
-                        lastMove: Date.now()
+                        lastMove: Date.now(),
+                        lastAttack: 0 // Track last time this fire attacked a defense
                     };
                     
                     newFires.push(newFire);
@@ -935,6 +944,7 @@ function getSlowFactorAt(row, col) {
     gameState.defenses.forEach(defense => {
         if (defense.defenseType === 'firebreak' && defense.row === row && defense.col === col) {
             slowFactor = Math.max(slowFactor, DEFENSES.firebreak.slowFactor);
+            console.log(`Fire at (${row}, ${col}) slowed by fire break - slowFactor: ${slowFactor}`);
         }
     });
     
@@ -1108,7 +1118,7 @@ function drawGame() {
             ctx.fillRect(defense.col * CONFIG.TILE_SIZE, defense.row * CONFIG.TILE_SIZE, CONFIG.TILE_SIZE, CONFIG.TILE_SIZE);
             
             // Add some texture to the dirt (random darker spots)
-            //ctx.fillStyle = '#6b5838';
+            ctx.fillStyle = '#6b5838';
             //for (let i = 0; i < 8; i++) {
             //    const spotX = defense.col * CONFIG.TILE_SIZE + Math.random() * CONFIG.TILE_SIZE;
             //    const spotY = defense.row * CONFIG.TILE_SIZE + Math.random() * CONFIG.TILE_SIZE;
