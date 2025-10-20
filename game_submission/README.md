@@ -47,7 +47,8 @@ There is no "win" - the fire always eventually overwhelms defenses (mimicking re
 ## Running the Game
 
 ### Method 1: Direct Opening (Easiest)
-Simply double-click `index.html` or drag it into any modern browser (Chrome, Firefox, Edge, Safari).
+Simply run in a VSCode Powershell terminal:
+start <insert full path to indext.html file>
 
 ### Method 2: Local Server (Optional)
 ```bash

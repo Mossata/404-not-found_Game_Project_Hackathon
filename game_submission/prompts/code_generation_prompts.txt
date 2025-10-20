@@ -1,0 +1,158 @@
+Here are the first few prompts I gave to Claude Sonnet 4.5, using Copilot in VsCode, operating in agent mode, which started the coding process:
+
+"Ok I am completing a Hackathon competition, and i have been assigned a chellenge to vibe code a game. I will provide the challenge specifications below. Do not suggest ideas or anything juat yet, I have worked out an idea for the game I will give next:
+
+
+Overview
+For this challenge, students will vibe code using LLMs to design and develop a web-based game that highlights and addresses a pressing social challenge in Vietnam or Australia. The game should be fun to play, educational, and impactful - giving players a fresh perspective on important real-world issues.
+
+Description
+You are required to vibe code a game using any LLMs that you find suitable to achieve the goals. The aim is to deliver a complete web game that fits the theme:
+
+The game should take the form of a board game, card game, dice game, or any game topic of simple web game format.
+The gameplay mechanics must directly connect to the chosen social issue, making the game both educational and engaging.
+Suggested themes may include (but are not limited to):
+Climate change & sustainability
+Access to education
+Mental health & wellbeing
+Social equity & inclusion
+Community resilience
+So on
+Contestants need to decide on topics that suit their local context (either Vietnam or Australia).
+
+Game Requirements
+Your game must include at least the following screens/views:
+
+Menu
+Play
+Please free to add other approriate screens as you would like.
+
+Additional guidelines:
+
+The game must be in 2D. (Optional: or 3D if your team is able.)
+Game assets (sprites, backgrounds, sound effects, code logics, etc.) can also be generated using your choices of AI models such as ChatGPT, Gemini, Nano Banana, Sora, …, where appropriate.
+The game must only use HTML, CSS and Javascript. Feel free to use any HTML, CSS and JavaScript libraries/frameworks as long as it can run fully on the browser (only on front-end) without a need to install any additional installation or setup or backend.
+You can use any AI platform, extension, website or service to help you to create this game.
+Submission Requirements
+Teams must submit following this specific directory structure on a public GitHub repository:
+
+game_submission/
+├── README.md    # Overview, instructions to run the game, and project summary  
+│  
+├── project_report.pdf   # Full report with introduction of the game, game theme topic justification, potential impact, technology stack (including AI tools and web libraries), overview of game mechanics, and reflection  
+│  
+├── youtube_link.txt  # Include only the YouTube URL for your game’s demo video with voice-over (maximum 7 minutes)  
+│  
+├── prompts/  
+│   ├── concept_prompts.txt                  # Prompts used for brainstorming ideas  
+│   ├── asset_generation_prompts.txt        # Prompts used for generating visuals or assets  
+│   ├── code_generation_prompts.txt          # Prompts used for game logic or UI  
+│   ├── refinement_prompts.txt              # Prompts used for debugging, polishing, etc.  
+│   └── ...                                                            
+│  
+├── game_app/                        # A playable, working web game app  
+│   ├── index.html                   # Main entry point (Welcome/Menu/Play)  
+│   └── ...                          # Other relevant game files and folders (game assets, css, javascript, etc.)  
+│  
+└── screenshots/                     # Maximum 5 screenshots only  
+    ├── menu_screen.png  
+    ├── play_screen1.png  
+    ├── play_screen2.png  
+    ├── play_screen3.png  
+    └── results_screen.png  
+Note:
+
+You need to submit the URL of the public GitHub repo via our Google form. Make sure the repo can be accessed easily without any constraints.
+You need to follow the same directory structure and have the same folder names, file names, file extensions (in bold) as shown above.
+Important: YouTube may take from a few minutes up to one hour to finish processing uploads (especially HD/4K). Upload your demo video early so the link is generated and fully playable before the deadline. Make sure the video is viewable (Public or Unlisted) without sign-in.
+Submission
+
+Please submit the full URL of your public GitHub repo containing game_submission folder (described above) to this form.
+Make sure your team's name matches your registered team name.
+Link: https://forms.office.com/r/1pLPWmYAdP
+Reference Example Repository
+
+To see the exact directory and file structure required for submissions, refer to this sample repo: https://github.com/TomHuynhSG/MyTeamName_Sample_Game_Project_Hackathon
+Use it only as a reference for structure and naming; your game, assets, and prompts must be your own.
+Assessment Criteria
+
+Your game will be judged based on:
+
+1. Relevance & Impact 
+Assesses the game's connection to a significant social issue and its potential to raise awareness, foster empathy, or inspire positive action.
+
+2. Creativity & Originality 
+Evaluates innovativeness of game concept, gameplay mechanics, narrative, creative application of AI tools, and originality in addressing the social issue.
+
+3. Gameplay & User Experience 
+Assesses quality of player interaction, fun factor, engagement, visual design, controls, polish, and overall playability. You will be provided with game screenshots to visually evaluate the UI design, visual polish, layout, and overall aesthetic quality.
+
+4. Technical Execution 
+Evaluates code quality, structure, performance, best practices, and adherence to technical constraints (HTML, CSS, JavaScript, front-end only).
+
+5. Documentation, Presentation & Reflection
+Assesses quality and completeness of documentation (README, report, prompts), video presentation quality, and demonstration of learning/reflection."
+
+
+
+"RESTARTING! I am still making a game, but here is a completely new prompt for you to go off of:
+
+I want to build a browser-based real-time strategy game called “Bushfire Balance” using only HTML, CSS, and JavaScript (with Canvas or a lightweight 2D library like Phaser.js if needed). It should resemble a Plants vs Zombies–style game where a house is on the left side of the screen, and fire advances from the right.
+
+Core gameplay requirements:
+- The player earns money over time as "income from a job." This ticks up each second. However, once the fire crosses a certain threshold (too close to the house), income stops.
+- The playfield is a grid, similar to Plants vs Zombies. Defenses can be placed into tiles.
+- Defenses include:
+  - Water Hose: slows down fire in a lane.
+  - Fire Block: temporary wall that absorbs fire.
+  - Sprinkler: slows fire across multiple adjacent tiles.
+- The fire starts as small embers or single flames in lanes, which can be put out. Fire can spread forward and sideways to adjacent tiles. Over time, waves of fire grow stronger and more unstoppable.
+- The player has the option to "Leave" at any time before the fire reaches the driveway (located in the middle bottom of the grid). This is represented by a car sprite driving off-screen. Once the fire reaches the driveway, leaving is no longer possible.
+- If the player leaves, the game ends with a financial report:
+  - Money saved (unspent).
+  - Expenses (house/property damage, which is always significant).
+  - Outcome: survival guaranteed.
+- If the player stays until the fire overwhelms the house, a cutscene triggers: the player hides inside. A random dice roll decides if they perish or survive. If they survive, the house is usually badly damaged. This highlights the "gamble" of staying.
+- Important: It should be mechanically possible to delay the fire with defenses, but defeating the fire entirely is impossible. The waves always become overwhelming eventually.
+
+UI requirements:
+- Menu screen with title and "Start Game."
+- Main play screen with:
+  - Grid of tiles (for defense placement).
+  - House sprite on the left.
+  - Fire advancing from the right.
+  - Money counter at the top.
+  - Buttons for purchasing/placing defenses.
+  - “Leave Now” button at the bottom center (disabled once fire reaches driveway).
+- End screen with survival outcome, financial report, and restart button.
+
+Tone and style:
+- Serious overall tone, but sprites can be simple or slightly cartoony for clarity.
+- Background should show a bushfire-prone environment (dry grass, smoky sky).
+- Sound effects: optional but would add impact (crackling fire, alarm when leaving option is about to close).
+
+Code requirements:
+- Structure the project cleanly as:
+  - index.html
+  - style.css
+  - script.js (or Phaser scenes if using Phaser)
+- Keep code modular, with clear functions for:
+  - Grid and placement logic
+  - Fire spread logic
+  - Income tick system
+  - Leaving mechanic and end screen
+  - Random survival dice roll on house cutscene
+- Use placeholder sprites and simple assets first. I will replace them later.
+- Comment the code clearly so I can expand with new defenses, more fire behaviors, or different endings.
+
+Deliverable:
+Please scaffold a first working prototype with:
+- Menu → Play → End screen flow
+- Basic grid with at least 3 defenses
+- Fire that spreads and grows stronger
+- Money income that stops once fire crosses a threshold
+- Working “Leave Now” button and outcome screen
+- Placeholder sprites/graphics "
+
+
+
