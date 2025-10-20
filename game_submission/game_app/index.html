@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bushfire Balance - Tower Defense</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Menu Screen -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-container">
+            <h1 class="game-title">🔥 Bushfire Balance 🔥</h1>
+            <p class="game-subtitle">Defend Your Home or Leave Early?</p>
+            <div class="menu-info">
+                <h3>How to Play:</h3>
+                <ul>
+                    <li>🏠 Your house is on the left. Fire advances from the right.</li>
+                    <li>💰 You earn income over time from your job.</li>
+                    <li>🛡️ Place defenses on the grid to slow the fire.</li>
+                    <li>🚗 You can leave at any time (until fire blocks the driveway).</li>
+                    <li>⚠️ <strong>The fire cannot be stopped—only delayed.</strong></li>
+                    <li>⚠️ Staying means gambling your life. Leaving means guaranteed survival.</li>
+                </ul>
+            </div>
+            <button id="start-btn" class="btn btn-primary">Start Game</button>
+            <div class="menu-footer">
+                <p>🌏 Addressing Australian bushfire awareness</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Play Screen -->
+    <div id="play-screen" class="screen">
+        <!-- Danger overlay - intensity increases with wave -->
+        <div class="danger-overlay" id="danger-overlay"></div>
+        
+        <!-- Top HUD -->
+        <div class="game-hud">
+            <div class="hud-left">
+                <div class="money-display">
+                    💰 Money: $<span id="money-amount">0</span>
+                </div>
+                <div class="income-status" id="income-status">
+                    📈 Income: $<span id="income-rate">30</span>/sec
+                </div>
+            </div>
+            <div class="hud-center">
+                <div class="fire-warning" id="fire-warning">
+                    🔥 Fire Wave <span id="wave-number">1</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="escape-status" id="escape-status">
+                    🚗 Escape: <span class="status-open">AVAILABLE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Defense Shop -->
+        <div class="defense-shop">
+            <div class="shop-title">Defenses</div>
+            <button class="defense-btn" id="buy-firebreak" data-defense="firebreak" title="Pre-burnt dirt area. Cannot be destroyed. Slows fires that walk over it.">
+                <div class="defense-icon">🟫</div>
+                <div class="defense-name">Fire Break</div>
+                <div class="defense-cost">$300</div>
+            </button>
+            <button class="defense-btn" id="buy-hose" data-defense="hose" title="Shoots water to extinguish fires. Can catch fire and stop working. Can extinguish other defenses.">
+                <div class="defense-icon">💧</div>
+                <div class="defense-name">Water Hose</div>
+                <div class="defense-cost">$500</div>
+            </button>
+            <button class="defense-btn" id="buy-wall" data-defense="wall" title="Fire-resistant wall! Cannot catch fire. Takes damage but stays functional.">
+                <div class="defense-icon">🧱</div>
+                <div class="defense-name">Fire Block</div>
+                <div class="defense-cost">$1000</div>
+            </button>
+            <button class="defense-btn" id="buy-sprinkler" data-defense="sprinkler" title="Shoots water in 2x2 area. Can catch fire and stop working. Can extinguish other defenses.">
+                <div class="defense-icon">🌧️</div>
+                <div class="defense-name">Sprinkler</div>
+                <div class="defense-cost">$1500</div>
+            </button>
+            <button class="clear-selection-btn" id="clear-selection">❌ Cancel</button>
+        </div>
+
+        <!-- Game Canvas Container -->
+        <div class="game-canvas-container">
+            <div class="game-layout">
+                <div class="house-display">🏠</div>
+                <canvas id="game-canvas"></canvas>
+            </div>
+            <!-- Car positioned above driveway -->
+            <div class="car-container">
+                <span class="car-sprite" id="car-sprite">🚗</span>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="action-bar">
+            <button id="helicopter-btn" class="btn btn-helicopter" disabled>
+                🚁 HELICOPTER WATER DROP (One Time Only!)
+            </button>
+            <button id="leave-btn" class="btn btn-leave">
+                🚗 LEAVE NOW (Guaranteed Survival)
+            </button>
+            <div class="game-info">
+                <p id="game-message">Click a defense, then click a tile to place it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cutscene Screen (Staying in house) -->
+    <div id="cutscene-screen" class="screen">
+        <div class="cutscene-container">
+            <h2>🏠 YOU STAYED IN THE HOUSE</h2>
+            <p class="cutscene-text">The fire has overwhelmed your defenses...</p>
+            <p class="cutscene-text">You retreat inside and lock the doors.</p>
+            <p class="cutscene-text larger">Rolling the dice to see if you survive...</p>
+            
+            <div class="dice-area">
+                <div id="cutscene-dice" class="dice">?</div>
+            </div>
+
+            <div id="dice-result" class="dice-result hidden">
+                <p>You rolled: <span id="dice-value">0</span></p>
+                <p class="threshold-text">Need 4+ to survive</p>
+            </div>
+
+            <button id="roll-survival-btn" class="btn btn-primary">Roll For Survival</button>
+            <button id="see-results-btn" class="btn btn-secondary hidden">See Results</button>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <div class="results-container">
+            <h2 id="result-title">Game Over</h2>
+            <div id="result-icon" class="result-icon">💀</div>
+            
+            <div class="result-summary">
+                <h3 id="result-message">Outcome</h3>
+                <p id="result-description">Description of what happened.</p>
+            </div>
+
+            <div class="results-content">
+                <div class="financial-report">
+                    <h3>📊 Financial Report</h3>
+                    <div class="report-row">
+                        <span>Money Earned:</span>
+                        <span class="money-positive">+$<span id="money-earned">0</span></span>
+                    </div>
+                    <div class="report-row">
+                        <span>Money Spent on Defenses:</span>
+                        <span class="money-negative">-$<span id="money-spent">0</span></span>
+                    </div>
+                    <div class="report-row">
+                        <span>Property Damage:</span>
+                        <span class="money-negative">-$<span id="property-damage">0</span></span>
+                    </div>
+                    <hr>
+                    <div class="report-row total">
+                        <span>Net Financial Impact:</span>
+                        <span id="net-total">$0</span>
+                    </div>
+                </div>
+
+                <div class="result-lesson">
+                    <h4>📚 Real-World Lesson</h4>
+                    <p id="lesson-text">Lesson text goes here.</p>
+                </div>
+            </div>
+
+            <div class="result-buttons">
+                <button id="restart-btn" class="btn btn-primary">Play Again</button>
+                <button id="menu-btn" class="btn btn-secondary">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

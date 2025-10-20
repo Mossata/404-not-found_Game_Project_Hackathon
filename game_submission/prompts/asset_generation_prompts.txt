@@ -1,0 +1,37 @@
+Here is the series of prompts I used to generate some custom sprites for the game:
+
+"I want your help generating some sprites for a game. I will give prompots for each sprite as well as the exact name the file it needs to be saved as; fire sprite, pixel art, transparent background, orange flames, 128x128 fire-normal.png"
+
+"actually, here are the prompts for all the sprites i need:
+
+```
+water hose turret, pixel art, transparent background, blue, 128x128
+```
+```
+brick wall barrier, pixel art, transparent background, gray, 128x128  
+```
+```
+lawn sprinkler, pixel art, transparent background, blue, 128x128
+```
+```
+australian house, red roof, pixel art, transparent background, 128x128
+```"
+
+"onto next one, say which one youre doing befreo you generate "
+
+"and next"
+
+"next"
+
+"next"
+
+"in the same style still, pixel art, 128 by 128, I want a fire ember, one that can be used as a projectile to show a fire spawining new fires"
+
+"remake the droplet, it needs to be pointing in a single direction, almost like a stream going quickly through the air"
+
+"Now I want you to take the same water hose sprite from earlier but it itself is on fire"
+
+"Perfect, and finally do the same on fire for the sprinkler you did earlier"
+
+"make a grey car sprite in the same style "
+
