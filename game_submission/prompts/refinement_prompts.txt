@@ -1,2 +1,16 @@
 And here are the many many prompts used to refine the game, still with Claude Sonnet opened in VsCode.
 
+REFINEMENT PROMPT 1 - Defense System Overhaul:
+"The current defense system feels unbalanced. Remove the slowdown effects from the water hose and sprinkler defenses - they should only damage fires, not slow them. I also want to add a new defense called 'Fire Break' that costs $300, looks like dirt, and passively slows fires by 3x when they walk over it. It should be indestructible and can't catch fire. This gives players a cheap early defense option."
+
+REFINEMENT PROMPT 2 - Fire Speed Consistency Fix:
+"The fires are getting progressively slower over time for some reason, even without any defenses affecting them. The fire speed should be constant within each wave, only increasing when the wave number goes up (every 3 waves add 0.1 px/frame). Fix whatever is causing the gradual slowdown bug - fires should maintain consistent speeds."
+
+REFINEMENT PROMPT 3 - Defense Durability Crisis:
+"The defenses keep dying instantly when fires attack them! I think it's because the fires are attacking 60 times per second since the game runs at 60fps. Add an attack cooldown system so fires can only attack defenses once every 1 second (1000ms). This should make defenses last 3-10 seconds like they're supposed to."
+
+REFINEMENT PROMPT 4 - Visual Improvements:
+"The game needs better visual polish. First, change the grass background from the default color to an actual green (#6aa84f) so it looks like real grass. Second, the car sprite is currently showing in the top HUD area - move it so it appears just above the driveway on the actual game grid instead. Also make sure all the sprite paths are correct - they should use './assets/images/' not '../assets/'."
+
+REFINEMENT PROMPT 5 - Fire Movement Logic Bug:
+"There's a critical bug in the fire movement code! When I place fire breaks, the fires sometimes get incredibly slow or even stop moving. I think the issue is in the moveFires() function where it calculates moveSpeed - it's using subtraction (baseSpeed - slowFactor) instead of division (baseSpeed / slowFactor). This causes negative speeds! Fix this so fires properly slow down by dividing the speed, not subtracting."
